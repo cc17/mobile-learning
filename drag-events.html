@@ -1,0 +1,75 @@
+<html>
+<head>
+	<title></title>
+	<link rel="apple-touch-startup-image" href="start.jpg"/>
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no"/>
+	<meta name="apple-mobile-web-app-status-bar-style" content="black">	
+	<style type="text/css">
+	body,ul,li,h1,h2,h3,h4{
+		margin:0;
+		padding: 0
+	}
+	ul,li{
+		list-style: none;
+	}
+	body{
+		height:100%;
+	}
+	
+	.sprite { /* 方块的class名称*/
+		position: absolute;
+		width: 50px;
+		height: 50px;
+		background-color: red;
+	}
+	</style>
+</head>
+<body>
+<div id="canvas"  style="position: relative;width:100%;height: 100%;">点击一下呗s</div>
+<script type="text/javascript" src="assert/js/zepto.min.js"></script>
+<script type="text/javascript">
+	(function(){
+		var $canvas = $('#canvas');
+		var $sprite = null,
+			startX,
+			startY;
+		$canvas.on('touchstart',function(e){
+			e.preventDefault();
+			if($sprite || !e.touches.length){
+				return;
+			}
+			var target = e.touches[0];
+			startX = target.pageX;
+			startY = target.pageY;
+			$sprite = $('<div class="sprite"/>');
+			$sprite.css({
+				top:startY + 'px',
+				left:startX + 'px'
+			}).appendTo($canvas);
+
+		});
+		$canvas.on('touchmove',function(event){
+			event.preventDefault();
+
+			if (!$sprite || !event.touches.length) return;
+
+			var touch = event.touches[0],
+				x = touch.pageX - startX,
+				y = touch.pageY - startY;
+			
+			 $sprite[0].style.webkitTransform = 'translate(' + x + 'px, ' + y + 'px)';
+
+		});
+		$canvas.on('touchend',function(e){
+			if(!$sprite){
+				return;
+			}
+			$sprite.remove();
+			$sprite = null;
+		});
+
+	})();
+</script>
+</body>
+</html>
